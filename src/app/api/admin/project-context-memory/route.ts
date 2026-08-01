@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerClient } from '@/lib/supabase'
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/session'
 import { generateEmbedding } from '@/lib/embeddings'
 
 export async function GET(request: NextRequest) {

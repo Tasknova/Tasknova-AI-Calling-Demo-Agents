@@ -112,21 +112,6 @@ export default function LivekitVoiceSession({ agentId, agentName, onEnd }: Props
     }
   }, [cleanup])
 
-  // --- Attach remote audio track (deduplicated) ---
-  const attachAudioTrack = (track: RemoteTrack) => {
-    const sid = track.sid
-    if (sid && attachedSidsRef.current.has(sid)) {
-      console.log('[LiveKit] Skipping duplicate audio track:', sid)
-      return
-    }
-    if (sid) attachedSidsRef.current.add(sid)
-    const el = track.attach()
-    el.autoplay = true
-    el.style.display = 'none'
-    document.body.appendChild(el)
-    audioElementsRef.current.push(el)
-  }
-
   // --- Main start flow ---
   const startSession = useCallback(async (abortSignal: { aborted: boolean }) => {
     setErrorMessage(null)

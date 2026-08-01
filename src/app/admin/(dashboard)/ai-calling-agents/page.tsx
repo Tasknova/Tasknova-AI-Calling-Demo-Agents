@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
-import { Bot, ExternalLink, Sparkles, RefreshCw, Activity } from 'lucide-react'
+import { Bot, ExternalLink, Sparkles, RefreshCw } from 'lucide-react'
 
 interface Agent {
   agent_id: string

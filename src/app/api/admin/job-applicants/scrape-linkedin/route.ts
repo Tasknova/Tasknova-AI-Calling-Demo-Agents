@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 import { createServerClient } from '@/lib/supabase'
-import { getSession } from '@/lib/auth'
+import { getSession } from '@/lib/session'
 import { scrapePublicProfile, ScrapedSourceData } from '@/lib/jobApplicantAnalysis'
 
 export const runtime = 'nodejs'

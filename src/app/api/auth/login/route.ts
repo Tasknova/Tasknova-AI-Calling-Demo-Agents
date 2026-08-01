@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { login, createSession } from '@/lib/auth'
+import { login } from '@/lib/auth'
+import { createSession } from '@/lib/session'
 import { z } from 'zod'
 
 const loginSchema = z.object({
