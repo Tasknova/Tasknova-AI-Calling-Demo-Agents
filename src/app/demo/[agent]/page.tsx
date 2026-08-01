@@ -7,7 +7,7 @@ import { ArrowLeft, Bot, Play, CheckCircle2, Shield, Loader2 } from 'lucide-reac
 import LivekitVoiceSession from '@/components/LivekitVoiceSession'
 
 // ─── Agent configuration ────────────────────────────────────────────────────
-export const DEMO_AGENTS_MAP: Record<
+const DEMO_AGENTS_MAP: Record<
   string,
   {
     nameMatch: string
