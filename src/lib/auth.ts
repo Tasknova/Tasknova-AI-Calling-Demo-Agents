@@ -42,7 +42,3 @@ export async function login(email: string, password: string): Promise<AdminSessi
   }
 }
 
-export async function logout(): Promise<void> {
-  const cookieStore = cookies()
-  cookieStore.delete('admin_session')
-}

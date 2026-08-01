@@ -9,6 +9,7 @@ import {
   Track,
   ConnectionState,
   type LocalAudioTrack,
+  type Participant,
   type RemoteParticipant,
   type TrackPublication,
 } from 'livekit-client'
@@ -178,8 +179,8 @@ export default function LivekitVoiceSession({ agentId, agentName, onEnd }: Props
       roomRef.current = room
 
       // --- Debug Logging & Agent Speaking State ---
-      room.on(RoomEvent.ActiveSpeakersChanged, async (speakers: RemoteParticipant[]) => {
-        const isAgentTalking = speakers.some(p => p !== room.localParticipant)
+      room.on(RoomEvent.ActiveSpeakersChanged, (speakers: Participant[]) => {
+        const isAgentTalking = speakers.some(p => p.identity !== room.localParticipant.identity)
         setAgentSpeaking(isAgentTalking)
       })
 
