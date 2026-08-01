@@ -8,6 +8,7 @@ import {
   RemoteTrack,
   Track,
   ConnectionState,
+  type LocalAudioTrack,
   type RemoteParticipant,
   type TrackPublication,
 } from 'livekit-client'
