@@ -1,9 +1,8 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowLeft, Bot, Play, CheckCircle2, Shield, Loader2 } from 'lucide-react'
+import { Bot, Play, CheckCircle2, Shield, Loader2 } from 'lucide-react'
 import LivekitVoiceSession from '@/components/LivekitVoiceSession'
 
 // ─── Agent configuration ────────────────────────────────────────────────────
@@ -119,15 +118,9 @@ export default function DynamicDemoPage({ params }: { params: { agent: string } 
         <div className="bg-white p-8 rounded-2xl border border-gray-200 shadow-sm max-w-md w-full">
           <Bot className="w-16 h-16 text-gray-400 mx-auto mb-4" />
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Agent Not Found</h2>
-          <p className="text-gray-600 mb-6 text-sm">
-            The requested demo agent does not exist or is invalid.
+          <p className="text-gray-600 text-sm">
+            The requested demo agent does not exist or is unavailable.
           </p>
-          <Link
-            href="/admin/ai-calling-agents"
-            className="inline-flex items-center gap-2 px-5 py-2.5 bg-primary-600 text-white font-medium rounded-xl hover:bg-primary-700 transition shadow-sm"
-          >
-            <ArrowLeft className="w-4 h-4" /> Back to Demo Agents
-          </Link>
         </div>
       </div>
     )
@@ -147,24 +140,6 @@ export default function DynamicDemoPage({ params }: { params: { agent: string } 
             priority
             className="h-9 w-auto"
           />
-          {view === 'session' ? (
-            // During a session the back button ends the call first
-            <button
-              onClick={() => setView('landing')}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-200 transition text-sm font-medium"
-            >
-              <ArrowLeft className="w-4 h-4 text-gray-500" />
-              Back
-            </button>
-          ) : (
-            <Link
-              href="/admin/ai-calling-agents"
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-50 hover:bg-gray-100 text-gray-700 border border-gray-200 transition text-sm font-medium"
-            >
-              <ArrowLeft className="w-4 h-4 text-gray-500" />
-              <span>Back to Demo Agents</span>
-            </Link>
-          )}
         </div>
       </header>
 
