@@ -205,14 +205,8 @@ export default function DynamicDemoPage({ params }: { params: { agent: string } 
                 ) : !fetchedAgent ? (
                   <div className="flex flex-col items-center gap-3">
                     <p className="text-sm text-red-600 font-medium">
-                      ⚠️ Agent not found in the database. Please sync agents first.
+                      ⚠️ This agent is currently unavailable. Please try again later.
                     </p>
-                    <Link
-                      href="/admin/ai-calling-agents"
-                      className="px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium rounded-xl text-sm transition"
-                    >
-                      Go to Admin Panel
-                    </Link>
                   </div>
                 ) : (
                   <button
