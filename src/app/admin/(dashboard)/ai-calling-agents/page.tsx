@@ -26,7 +26,7 @@ const DEMO_AGENTS_CONFIG: Record<
 > = {
   Shriram_PFA: {
     nameMatch: 'Shriram_PFA',
-    displayName: 'Shriram PFA',
+    displayName: 'Finance Agent',
     description: 'Financial Assistance & Customer Support',
     route: '/demo/shriram-pfa',
     gradient: 'from-blue-600 to-indigo-600',
@@ -54,7 +54,7 @@ const DEMO_AGENTS_CONFIG: Record<
   },
   'Collection Bot - JEW': {
     nameMatch: 'Collection Bot - JEW',
-    displayName: 'Collection Bot - JEW',
+    displayName: 'Collection Bot',
     description: 'Collections & Payment Recovery',
     route: '/demo/collection-bot',
     gradient: 'from-red-600 to-rose-600',

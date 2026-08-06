@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
-import { Bot, Play, CheckCircle2, Shield, Loader2 } from 'lucide-react'
+import { Bot, Play, CheckCircle2, Shield, Loader2, User, Phone, Mail, Globe, MessageSquare } from 'lucide-react'
 import LivekitVoiceSession from '@/components/LivekitVoiceSession'
 
 // ─── Agent configuration ────────────────────────────────────────────────────
@@ -18,7 +18,7 @@ const DEMO_AGENTS_MAP: Record<
 > = {
   'shriram-pfa': {
     nameMatch: 'Shriram_PFA',
-    displayName: 'Shriram_PFA',
+    displayName: 'Finance Agent',
     category: 'Financial / Customer Service',
     description: 'Assists customers with financial services, policy information and customer support.',
     capabilities: ['Account Enquiries', 'Policy Information', 'Billing & Payments'],
@@ -46,7 +46,7 @@ const DEMO_AGENTS_MAP: Record<
   },
   'collection-bot': {
     nameMatch: 'Collection Bot - JEW',
-    displayName: 'Collection Bot - JEW',
+    displayName: 'Collection Bot',
     category: 'Collections / Recovery',
     description: 'Handles payment reminders and collection-related conversations.',
     capabilities: ['Payment Reminders', 'Structured Follow-ups', 'Repayment Plans'],
@@ -80,8 +80,33 @@ export default function DynamicDemoPage({ params }: { params: { agent: string } 
 
   const [fetchedAgent, setFetchedAgent] = useState<AgentData | null>(null)
   const [loadingAgent, setLoadingAgent] = useState(true)
-  // 'landing' | 'session'
-  const [view, setView] = useState<'landing' | 'session'>('landing')
+  // 'landing' | 'session' | 'contact'
+  const [view, setView] = useState<'landing' | 'session' | 'contact'>('landing')
+
+  // Contact form state
+  const [contactForm, setContactForm] = useState({ name: '', phone: '', email: '', website: '', details: '' })
+  const [submitting, setSubmitting] = useState(false)
+  const [submitted, setSubmitted] = useState(false)
+  const [submitError, setSubmitError] = useState<string | null>(null)
+
+  async function handleContactSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setSubmitting(true)
+    setSubmitError(null)
+    try {
+      const res = await fetch('/api/demo/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...contactForm, agentName: agentConfig?.displayName }),
+      })
+      if (!res.ok) throw new Error('Failed to send')
+      setSubmitted(true)
+    } catch {
+      setSubmitError('Something went wrong. Please try again.')
+    } finally {
+      setSubmitting(false)
+    }
+  }
 
   // Fetch matching agent from backend
   useEffect(() => {
@@ -225,8 +250,112 @@ export default function DynamicDemoPage({ params }: { params: { agent: string } 
             <LivekitVoiceSession
               agentId={fetchedAgent.agent_id}
               agentName={agentConfig.displayName}
-              onEnd={() => setView('landing')}
+              onEnd={() => setView('contact')}
             />
+          )}
+
+          {view === 'contact' && (
+            <>
+              {submitted ? (
+                <div className="flex flex-col items-center gap-5 py-8">
+                  <div className="w-16 h-16 rounded-full bg-green-50 border border-green-200 flex items-center justify-center">
+                    <CheckCircle2 className="w-8 h-8 text-green-500" />
+                  </div>
+                  <div className="space-y-2">
+                    <h2 className="text-2xl font-bold text-gray-900">Thank You!</h2>
+                    <p className="text-gray-500 text-sm max-w-xs mx-auto">Our team will reach out to you shortly. We&apos;re excited to show you what TaskNova can do.</p>
+                  </div>
+                  <button
+                    onClick={() => { setView('landing'); setSubmitted(false); setContactForm({ name: '', phone: '', email: '', website: '', details: '' }) }}
+                    className="mt-2 px-6 py-2.5 rounded-xl border border-gray-200 text-gray-600 hover:bg-gray-50 text-sm font-medium transition"
+                  >
+                    Try Demo Again
+                  </button>
+                </div>
+              ) : (
+                <div className="w-full max-w-md mx-auto space-y-6">
+                  <div className="space-y-1">
+                    <h2 className="text-2xl font-bold text-gray-900">Interested? Let&apos;s Connect</h2>
+                    <p className="text-gray-500 text-sm">Share your details and our team will get in touch with you.</p>
+                  </div>
+                  <form onSubmit={handleContactSubmit} className="space-y-4 text-left">
+                    {/* Name */}
+                    <div className="relative">
+                      <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <input
+                        required
+                        type="text"
+                        placeholder="Full Name *"
+                        value={contactForm.name}
+                        onChange={e => setContactForm(p => ({ ...p, name: e.target.value }))}
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-400 transition"
+                      />
+                    </div>
+                    {/* Phone */}
+                    <div className="relative">
+                      <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <input
+                        required
+                        type="tel"
+                        placeholder="Phone Number *"
+                        value={contactForm.phone}
+                        onChange={e => setContactForm(p => ({ ...p, phone: e.target.value }))}
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-400 transition"
+                      />
+                    </div>
+                    {/* Email */}
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <input
+                        required
+                        type="email"
+                        placeholder="Work Email *"
+                        value={contactForm.email}
+                        onChange={e => setContactForm(p => ({ ...p, email: e.target.value }))}
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-400 transition"
+                      />
+                    </div>
+                    {/* Website */}
+                    <div className="relative">
+                      <Globe className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                      <input
+                        type="url"
+                        placeholder="Company Website (optional)"
+                        value={contactForm.website}
+                        onChange={e => setContactForm(p => ({ ...p, website: e.target.value }))}
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-400 transition"
+                      />
+                    </div>
+                    {/* Note */}
+                    <div className="relative">
+                      <MessageSquare className="absolute left-3 top-3.5 w-4 h-4 text-gray-400" />
+                      <textarea
+                        rows={3}
+                        placeholder="Any additional notes... (optional)"
+                        value={contactForm.details}
+                        onChange={e => setContactForm(p => ({ ...p, details: e.target.value }))}
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-primary-300 focus:border-primary-400 transition resize-none"
+                      />
+                    </div>
+                    {submitError && <p className="text-red-500 text-xs">{submitError}</p>}
+                    <button
+                      type="submit"
+                      disabled={submitting}
+                      className="w-full py-3.5 rounded-xl bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 text-white font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
+                    >
+                      {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
+                      {submitting ? 'Sending...' : 'Submit'}
+                    </button>
+                  </form>
+                  <button
+                    onClick={() => setView('landing')}
+                    className="w-full text-xs text-gray-400 hover:text-gray-600 transition pt-1"
+                  >
+                    Skip for now
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </main>
